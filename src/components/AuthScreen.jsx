@@ -3,10 +3,10 @@ import { supabase } from '../supabaseClient.js';
 import { SKY, DARK_NAVY, globalStyles } from '../theme.js';
 import Clouds from './Clouds.jsx';
 
-export default function AuthScreen() {
+export default function AuthScreen({ urlError = '' }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState(urlError);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
