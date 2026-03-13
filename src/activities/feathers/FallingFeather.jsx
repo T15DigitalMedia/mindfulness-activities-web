@@ -11,7 +11,7 @@ function FallingFeather({ id, startX, delay, screenH, screenW, onLanded, feather
   const posRef = useRef({ y: -80, x: startX });
   const swayRef = useRef(0);
   const rafRef = useRef(null);
-  const speed = 0.6 + Math.random() * 0.4;
+  const speed = 1.0 + Math.random() * 0.4;
 
   useEffect(() => {
     let startTime = null;
