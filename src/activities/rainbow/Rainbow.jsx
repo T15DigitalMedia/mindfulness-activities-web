@@ -21,9 +21,15 @@ function Rainbow() {
     setAnimating(true);
   }, []);
 
+  // Timings (all in ms):
+  //   START_DELAY   8000  — pause after spacebar before first arc begins
+  //   ARC_DRAW      6000  — CSS transition duration for each arc (see pathStyle below)
+  //   ARC_PAUSE     8000  — pause after each arc finishes before the next starts
+  //   INTER_ARC    14000  — total gap between arc starts (ARC_DRAW + ARC_PAUSE)
+
   useEffect(() => {
     const onKey = (e) => {
-      if (e.code === 'Space' && !animating) startRainbow();
+      if (e.code === 'Space' && !animating) setTimeout(startRainbow, 8000);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -32,7 +38,7 @@ function Rainbow() {
   useEffect(() => {
     if (!animating) return;
     if (visibleBands >= RAINBOW_COLORS.length) { setAnimating(false); return; }
-    const t = setTimeout(() => setVisibleBands(v => v + 1), 6000);
+    const t = setTimeout(() => setVisibleBands(v => v + 1), 14000); // ARC_DRAW + ARC_PAUSE
     return () => clearTimeout(t);
   }, [animating, visibleBands]);
 
@@ -57,7 +63,7 @@ function Rainbow() {
             strokeLinecap: 'round',
             strokeDasharray: quarterCirc,
             strokeDashoffset: isVisible ? 0 : quarterCirc,
-            transition: isVisible ? 'stroke-dashoffset 6s ease-out' : 'none',
+            transition: isVisible ? 'stroke-dashoffset 6s ease-out' : 'none', // ARC_DRAW
           };
           return (
             <g key={i}>
