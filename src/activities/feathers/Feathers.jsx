@@ -7,14 +7,16 @@ function Feathers({ screenW, screenH }) {
   const landedRef = useRef(new Set());
   const waveRef = useRef(1);
   const runCountRef = useRef(0);
+  const featherCountRef = useRef(0);
 
   const launchWave = useCallback((count) => {
     landedRef.current.clear();
+    featherCountRef.current = count;
     const newFeathers = Array.from({ length: count }, (_, i) => ({
       id: `${Date.now()}-${i}`,
       startX: 80 + Math.random() * (screenW - 160),
       delay: i * 200,
-      featherIndex: i % 2,
+      featherIndex: i === 1 ? 1 : 0,
     }));
     setFeathers(newFeathers);
   }, [screenW]);
@@ -23,21 +25,17 @@ function Feathers({ screenW, screenH }) {
 
   const handleLanded = useCallback((id) => {
     landedRef.current.add(id);
-    setFeathers(prev => {
-      if (landedRef.current.size >= prev.length) {
-        runCountRef.current += 1;
-        if (runCountRef.current >= 2) {
-          runCountRef.current = 0;
-          const nextWave = waveRef.current + 1;
-          waveRef.current = nextWave;
-          setWave(nextWave);
-          setTimeout(() => launchWave(nextWave), 600);
-        } else {
-          setTimeout(() => launchWave(waveRef.current), 600);
-        }
-      }
-      return prev;
-    });
+    if (landedRef.current.size < featherCountRef.current) return;
+    runCountRef.current += 1;
+    if (runCountRef.current >= 2) {
+      runCountRef.current = 0;
+      const nextWave = waveRef.current + 1;
+      waveRef.current = nextWave;
+      setWave(nextWave);
+      setTimeout(() => launchWave(nextWave), 600);
+    } else {
+      setTimeout(() => launchWave(waveRef.current), 600);
+    }
   }, [launchWave]);
 
   return (
