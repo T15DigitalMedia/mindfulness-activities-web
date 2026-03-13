@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SKY, DARK_NAVY, globalStyles } from './theme.js';
+import { version } from '../package.json';
 import { supabase } from './supabaseClient.js';
 import Clouds from './components/Clouds.jsx';
 import { Menu } from './components/Menu.jsx';
@@ -33,6 +34,11 @@ export default function App() {
       </button>
 
       {screen === "menu" && <Menu onSelect={setScreen} />}
+      {screen === "menu" && (
+        <span style={{ position: "absolute", bottom: 10, left: 14, fontSize: "0.65rem", color: DARK_NAVY, opacity: 0.3, pointerEvents: "none" }}>
+          v{version}
+        </span>
+      )}
 
       {screen !== "menu" && <BackBtn onClick={() => setScreen("menu")} />}
 
