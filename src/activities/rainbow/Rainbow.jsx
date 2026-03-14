@@ -24,30 +24,49 @@ function Rainbow() {
   // Timings (all in ms):
   //   START_DELAY   8000  — pause after spacebar before first arc begins
   //   ARC_DRAW      6000  — CSS transition duration for each arc (see pathStyle below)
-  //   ARC_PAUSE     8000  — pause after each arc finishes before the next starts
-  //   INTER_ARC    14000  — total gap between arc starts (ARC_DRAW + ARC_PAUSE)
+  //   ARC_PAUSE    16000  — pause after each arc finishes before the next starts
+  //   INTER_ARC    22000  — total gap between arc starts (ARC_DRAW + ARC_PAUSE)
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.code === 'Space' && !animating) setTimeout(startRainbow, 8000);
+    const onKey = e => {
+      if (e.code === "Space" && !animating) setTimeout(startRainbow, 8000);
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [animating, startRainbow]);
 
   useEffect(() => {
     if (!animating) return;
-    if (visibleBands >= RAINBOW_COLORS.length) { setAnimating(false); return; }
-    const t = setTimeout(() => setVisibleBands(v => v + 1), 14000); // ARC_DRAW + ARC_PAUSE
+    if (visibleBands >= RAINBOW_COLORS.length) {
+      setAnimating(false);
+      return;
+    }
+    const t = setTimeout(() => setVisibleBands(v => v + 1), 22000); // ARC_DRAW + ARC_PAUSE
     return () => clearTimeout(t);
   }, [animating, visibleBands]);
 
-  const W = 700, H = 420;
-  const cx = W / 2, cy = H + 20;
+  const W = 700,
+    H = 420;
+  const cx = W / 2,
+    cy = H + 20;
 
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible" }}>
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <svg
+        width={W}
+        height={H}
+        viewBox={`0 0 ${W} ${H}`}
+        style={{ overflow: "visible" }}
+      >
         {RAINBOW_COLORS.map((band, i) => {
           const radius = 130 + (RAINBOW_COLORS.length - 1 - i) * 30;
           const quarterCirc = (Math.PI * radius) / 2;
@@ -57,13 +76,13 @@ function Rainbow() {
           // Left foot → top (clockwise quarter arc)
           const leftPath = `M ${cx - radius} ${cy} A ${radius} ${radius} 0 0 1 ${cx} ${cy - radius}`;
           const pathStyle = {
-            fill: 'none',
+            fill: "none",
             stroke: band.color,
             strokeWidth: 34,
-            strokeLinecap: 'round',
+            strokeLinecap: "round",
             strokeDasharray: quarterCirc,
             strokeDashoffset: isVisible ? 0 : quarterCirc,
-            transition: isVisible ? 'stroke-dashoffset 6s ease-out' : 'none', // ARC_DRAW
+            transition: isVisible ? "stroke-dashoffset 6s ease-out" : "none", // ARC_DRAW
           };
           return (
             <g key={i}>
@@ -74,7 +93,14 @@ function Rainbow() {
         })}
         {/* Clouds — right feet span x=480–660 (center ~570), left x=40–220 (center ~130) */}
         <image href={cloudImg} x={330} y={310} width={480} height={260} />
-        <image href={cloudImg} x={-110} y={310} width={480} height={260} transform="translate(260, 0) scale(-1, 1)" />
+        <image
+          href={cloudImg}
+          x={-110}
+          y={310}
+          width={480}
+          height={260}
+          transform="translate(260, 0) scale(-1, 1)"
+        />
       </svg>
     </div>
   );
