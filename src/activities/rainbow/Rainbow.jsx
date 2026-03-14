@@ -38,6 +38,7 @@ function Rainbow() {
   useEffect(() => {
     if (!animating) return;
     if (visibleBands >= RAINBOW_COLORS.length) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAnimating(false);
       return;
     }

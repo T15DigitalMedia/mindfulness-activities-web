@@ -6,12 +6,10 @@ const FEATHER_FILTERS = [
   'hue-rotate(300deg) saturate(1.4)',
 ];
 
-function FallingFeather({ id, startX, delay, screenH, screenW, onLanded, featherIndex }) {
+function FallingFeather({ id, startX, delay, screenH, screenW, onLanded, featherIndex, speed }) {
   const ref = useRef(null);
   const posRef = useRef({ y: -80, x: startX });
-  const swayRef = useRef(0);
   const rafRef = useRef(null);
-  const speed = 1.0 + Math.random() * 0.4;
 
   useEffect(() => {
     let startTime = null;
@@ -36,6 +34,7 @@ function FallingFeather({ id, startX, delay, screenH, screenW, onLanded, feather
 
     const t = setTimeout(() => { rafRef.current = requestAnimationFrame(animate); }, delay);
     return () => { clearTimeout(t); cancelAnimationFrame(rafRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

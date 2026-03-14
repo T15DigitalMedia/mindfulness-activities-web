@@ -40,6 +40,7 @@ function Bubbles({ screenW, screenH }) {
 
   useEffect(() => {
     const b = initBubbles(screenW, screenH);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBubbles(b);
     bubblesRef.current = b;
   }, [screenW, screenH]);

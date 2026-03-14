@@ -2,7 +2,6 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import FallingFeather from './FallingFeather.jsx';
 
 function Feathers({ screenW, screenH }) {
-  const [wave, setWave] = useState(1);
   const [feathers, setFeathers] = useState([]);
   const landedRef = useRef(new Set());
   const waveRef = useRef(1);
@@ -17,10 +16,12 @@ function Feathers({ screenW, screenH }) {
       startX: 80 + Math.random() * (screenW - 160),
       delay: i * 200,
       featherIndex: i === 1 ? 1 : 0,
+      speed: 1.0 + Math.random() * 0.4,
     }));
     setFeathers(newFeathers);
   }, [screenW]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { launchWave(1); }, []);
 
   const handleLanded = useCallback((id) => {
@@ -31,7 +32,6 @@ function Feathers({ screenW, screenH }) {
       runCountRef.current = 0;
       const nextWave = waveRef.current + 1;
       waveRef.current = nextWave;
-      setWave(nextWave);
       setTimeout(() => launchWave(nextWave), 600);
     } else {
       setTimeout(() => launchWave(waveRef.current), 600);
@@ -42,7 +42,7 @@ function Feathers({ screenW, screenH }) {
     <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
       {feathers.map(f => (
         <FallingFeather key={f.id} id={f.id} startX={f.startX} delay={f.delay}
-          screenH={screenH} screenW={screenW} onLanded={handleLanded} featherIndex={f.featherIndex} />
+          screenH={screenH} screenW={screenW} onLanded={handleLanded} featherIndex={f.featherIndex} speed={f.speed} />
       ))}
     </div>
   );
