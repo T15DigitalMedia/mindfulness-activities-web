@@ -1,6 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import cloudImg from './cloud.png';
 
+// ─── TIMINGS (ms) ─────────────────────────────────────────────────────────────
+const START_DELAY = 8000;  // pause after spacebar before first arc begins
+const ARC_DRAW    = 6000;  // CSS transition duration for each arc
+const ARC_PAUSE   = 16000; // pause after each arc finishes before the next starts
+const INTER_ARC   = ARC_DRAW + ARC_PAUSE; // total gap between arc starts
+
 // ─── RAINBOW ──────────────────────────────────────────────────────────────────
 const RAINBOW_COLORS = [
   { color: "#FF0000", label: "Red" },
@@ -21,15 +27,9 @@ function Rainbow() {
     setAnimating(true);
   }, []);
 
-  // Timings (all in ms):
-  //   START_DELAY   8000  — pause after spacebar before first arc begins
-  //   ARC_DRAW      6000  — CSS transition duration for each arc (see pathStyle below)
-  //   ARC_PAUSE    16000  — pause after each arc finishes before the next starts
-  //   INTER_ARC    22000  — total gap between arc starts (ARC_DRAW + ARC_PAUSE)
-
   useEffect(() => {
     const onKey = e => {
-      if (e.code === "Space" && !animating) setTimeout(startRainbow, 8000);
+      if (e.code === "Space" && !animating) startRainbow();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -41,7 +41,8 @@ function Rainbow() {
       setAnimating(false);
       return;
     }
-    const t = setTimeout(() => setVisibleBands(v => v + 1), 22000); // ARC_DRAW + ARC_PAUSE
+    const delay = visibleBands === 0 ? START_DELAY : INTER_ARC;
+    const t = setTimeout(() => setVisibleBands(v => v + 1), delay);
     return () => clearTimeout(t);
   }, [animating, visibleBands]);
 
@@ -82,7 +83,7 @@ function Rainbow() {
             strokeLinecap: "round",
             strokeDasharray: quarterCirc,
             strokeDashoffset: isVisible ? 0 : quarterCirc,
-            transition: isVisible ? "stroke-dashoffset 6s ease-out" : "none", // ARC_DRAW
+            transition: isVisible ? `stroke-dashoffset ${ARC_DRAW / 1000}s ease-out` : "none",
           };
           return (
             <g key={i}>
