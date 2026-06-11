@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SKY, DARK_NAVY, globalStyles } from './theme.js';
+import { version } from '../package.json';
 import { supabase } from './supabaseClient.js';
 import Clouds from './components/Clouds.jsx';
 import { Menu } from './components/Menu.jsx';
@@ -19,10 +20,12 @@ export default function App() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  const isBubbles = screen === "bubbles";
+
   return (
-    <div style={{ width: "100vw", height: "100vh", background: SKY, position: "relative", overflow: "hidden" }}>
+    <div style={{ width: "100vw", height: "100vh", background: isBubbles ? "#D8D8D8" : SKY, position: "relative", overflow: "hidden" }}>
       <style>{globalStyles}</style>
-      <Clouds />
+      {!isBubbles && <Clouds />}
       <button
         onClick={() => supabase.auth.signOut()}
         style={{ position: "absolute", top: 12, right: 14, zIndex: 100, background: "rgba(255,255,255,0.55)", border: "none", borderRadius: 8, padding: "4px 10px", color: DARK_NAVY, fontSize: "0.75rem", cursor: "pointer", fontFamily: "inherit" }}
@@ -31,6 +34,11 @@ export default function App() {
       </button>
 
       {screen === "menu" && <Menu onSelect={setScreen} />}
+      {screen === "menu" && (
+        <span style={{ position: "absolute", bottom: 10, left: 14, fontSize: "0.65rem", color: DARK_NAVY, opacity: 0.3, pointerEvents: "none" }}>
+          v{version}
+        </span>
+      )}
 
       {screen !== "menu" && <BackBtn onClick={() => setScreen("menu")} />}
 
