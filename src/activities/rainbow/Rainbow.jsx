@@ -4,7 +4,7 @@ import cloudImg from './cloud.png';
 // ─── TIMINGS (ms) ─────────────────────────────────────────────────────────────
 const START_DELAY = 8000;  // pause after spacebar before first arc begins
 const ARC_DRAW    = 6000;  // CSS transition duration for each arc
-const ARC_PAUSE   = 16000; // pause after each arc finishes before the next starts
+const ARC_PAUSE   = 14000; // pause after each arc finishes before the next starts
 const INTER_ARC   = ARC_DRAW + ARC_PAUSE; // total gap between arc starts
 
 // ─── RAINBOW ──────────────────────────────────────────────────────────────────
