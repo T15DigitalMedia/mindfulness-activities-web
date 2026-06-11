@@ -23,12 +23,15 @@ function initBubbles(W, H) {
   };
 
   return [
-    ...Array.from({ length: 20 }, (_, i) => mkBubble(i, blueSvg, 150)),
-    mkBubble(20, purpleSvg,   150),
-    mkBubble(21, yellowSvg,   150),
-    mkBubble(22, redSvg,      150),
-    mkBubble(23, darkBlueSvg,  50),
-    (() => { const b = mkBubble(24, greenSvg, 150); return { ...b, vx: b.vx * 3, vy: b.vy * 3 }; })(),
+    ...Array.from({ length: 15 }, (_, i) => mkBubble(i, blueSvg, 150)),
+    mkBubble(20, purpleSvg, 150),
+    mkBubble(21, yellowSvg, 150),
+    mkBubble(22, redSvg, 150),
+    mkBubble(23, darkBlueSvg, 50),
+    (() => {
+      const b = mkBubble(24, greenSvg, 150);
+      return { ...b, vx: b.vx * 5, vy: b.vy * 5 };
+    })(),
   ];
 }
 
